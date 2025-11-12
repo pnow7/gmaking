@@ -183,23 +183,11 @@ public class CharacterServiceGptImpl implements CharacterServiceGpt {
 
             characterStatDAO.insertCharacterStat(statVO);
 
-            // 사용자 정보 업데이트 및 새 토큰 생성
-//            loginDAO.updateUserCharacterInfo(userId, finalData.getImageUrl());
-//
-//            LoginVO updatedUser = loginDAO.selectUserById(userId);
-//            String newToken = jwtTokenProvider.createToken(
-//                    updatedUser.getUserId(),
-//                    updatedUser.getRole(),
-//                    updatedUser.getUserNickname(),
-//                    updatedUser.isHasCharacter(), // true로 업데이트됨
-//                    updatedUser.getCharacterImageUrl(), // URL로 업데이트됨
-//                    updatedUser.getIncubatorCount(),
-//                    updatedUser.isAdFree()
-//            );
             loginDAO.updateUserCharacterInfo(userId);
             LoginVO currentUser = loginDAO.selectUserById(userId);
 
             String finalImageUrl = currentUser.getCharacterImageUrl();
+
             if (currentUser.getCharacterId() == null) {
                 finalImageUrl = null;
             }
@@ -224,8 +212,7 @@ public class CharacterServiceGptImpl implements CharacterServiceGpt {
                     .newToken(newToken)
                     .build();
 
-        } catch (Exception e) {
-            // Transactional 롤백 유도
+        } catch (Exception e) { // Transactional 롤백 유도
             logger.error("캐릭터 최종 확정 처리 중 오류 발생 (DB/토큰): {}", e.getMessage(), e);
             throw new RuntimeException("캐릭터 최종 확정 처리 중 서버 내부 오류가 발생했습니다.", e);
         }

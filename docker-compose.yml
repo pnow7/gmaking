@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: mysql:8.4
@@ -22,17 +20,13 @@ services:
     container_name: gmaking-backend
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       model.server.url: ${MODEL_SERVER_URL}
-      growth.server.url: ${GROWTH_MODEL_URL}
+      growth.server.url: ${GROWTH_AI_SERVER_URL}
     env_file:
       - ./backend/gmaking/.env
       - ./.env
     volumes:
       - ./backend/gmaking/src/main/resources/gcp-service-key.json:/app/src/main/resources/gcp-service-key.json
-      - /mnt/c/Users/thunder/Desktop/dev/Ai2차프로젝트/team-Gmaking/ai/runs/animal_cls_stage1/weights:/app/weights
     ports:
       - "8080:8080"
     depends_on:
@@ -59,8 +53,6 @@ services:
     build: ./ai_server
     container_name: ai_server
     restart: always
-    volumes:
-      - /mnt/c/Users/thunder/Desktop/dev/Ai2차프로젝트/team-Gmaking/ai/runs/animal_cls_stage1/weights:/app/model_weights
     ports:
       - "8000:8000"
     networks:

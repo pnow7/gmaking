@@ -46,8 +46,6 @@ public class GptImageServiceImpl implements GptImageService {
     @Override
     public Mono<List<String>> generateImage(String predictedAnimal, String characterName, String userPrompt) {
 
-        // 1. DALL-E에 전달할 프롬프트 조합 (GPT-4o의 LLM 능력 활용)
-        // 수정 제안 부분 (combinedPrompt 내부)
         // DALL-E에 전달할 프롬프트 조합 (GPT-4o의 LLM 능력 활용)
         String combinedPrompt = String.format("""
         **MAXIMUM FOCUS: SINGLE, ISOLATED, FULL-BODY PIXEL ART CHARACTER. ABSOLUTELY NO EXTRA ELEMENTS.**
@@ -65,7 +63,7 @@ public class GptImageServiceImpl implements GptImageService {
         Ensure the character is fully visible, NO cropping. The character MUST be the ONLY thing on the canvas.
     """, predictedAnimal, characterName, userPrompt != null && !userPrompt.isEmpty() ? userPrompt : "No extra details. Make it a cute warrior.");
 
-        // 2. DALL-E API 요청 바디 구성
+        // DALL-E API 요청 바디 구성
         GptImageRequest requestBody = GptImageRequest.builder()
                 .model(gptImageModelName) // dall-e-3
                 .prompt(combinedPrompt)
@@ -74,7 +72,7 @@ public class GptImageServiceImpl implements GptImageService {
                 .response_format("b64_json")
                 .build();
 
-        // 3. WebClient를 이용한 DALL-E API 호출
+        // WebClient를 이용한 DALL-E API 호출
         return webClient.post()
                 .uri("") // gpt.image.api.url 자체가 /images/generations 이므로
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +80,6 @@ public class GptImageServiceImpl implements GptImageService {
                 .retrieve()
                 .bodyToMono(GptImageResponse.class)
                 .map(response -> {
-                    // DALL-E 응답에서 Base64 데이터 추출
                     return response.getData().stream()
                             .map(GptImageResponse.ImageData::getB64_json)
                             .toList();

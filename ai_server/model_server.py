@@ -21,12 +21,7 @@ IMG_SIZE = 224
 
 # 모델 파일 경로 설정
 # MODEL_PATH = Path(__file__).resolve().parent / ".." / "ai" / "runs" / "animal_cls_stage1" / "weights" / "best.pt"
-
-# =================================================================================
-# 모델 파일 경로 설정
-WEIGHTS_DIR = Path("/app/model_weights") 
-MODEL_FILE_NAME = "best.pt"
-MODEL_PATH = WEIGHTS_DIR / MODEL_FILE_NAME
+MODEL_PATH = Path(__file__).resolve().parent / "best.pt"
 # =================================================================================
 
 model = None

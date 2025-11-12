@@ -52,13 +52,13 @@ public class GcsServiceImpl implements GcsService {
             throw new IOException("파일이 비어있습니다.");
         }
 
-        // 1. GCS에 저장될 고유 파일 이름 생성 (중복 방지)
+        // GCS에 저장될 고유 파일 이름 생성
         String originalFilename = file.getOriginalFilename();
         String extension = originalFilename != null && originalFilename.contains(".") ?
                 originalFilename.substring(originalFilename.lastIndexOf('.')) : "";
         String savedFileName = folderName + "/" + UUID.randomUUID().toString() + extension;
 
-        // 2. GCS 업로드
+        // GCS 업로드
         BlobId blobId = BlobId.of(bucketName, savedFileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
                 .setContentType(file.getContentType())
@@ -66,7 +66,7 @@ public class GcsServiceImpl implements GcsService {
 
         storage.createFrom(blobInfo, file.getInputStream());
 
-        // 3. 응답 객체 생성 및 반환
+        // 응답 객체 생성 및 반환
         String publicUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, savedFileName);
 
         ImageUploadResponseVO response = new ImageUploadResponseVO();
@@ -83,10 +83,10 @@ public class GcsServiceImpl implements GcsService {
             throw new IOException("이미지 바이트가 비어있습니다.");
         }
 
-        // 1. GCS에 저장될 고유 파일 이름 생성
+        // GCS에 저장될 고유 파일 이름 생성
         String savedFileName = folderName + "/" + UUID.randomUUID().toString() + "." + extension;
 
-        // 2. GCS 업로드
+        // GCS 업로드
         BlobId blobId = BlobId.of(bucketName, savedFileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
                 .setContentType("image/" + extension)
@@ -95,7 +95,7 @@ public class GcsServiceImpl implements GcsService {
         // 바이트 배열을 직접 업로드
         storage.create(blobInfo, imageBytes);
 
-        // 3. 응답 객체 생성 및 반환
+        // 응답 객체 생성 및 반환
         String publicUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, savedFileName);
 
         ImageUploadResponseVO response = new ImageUploadResponseVO();
