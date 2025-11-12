@@ -3,11 +3,8 @@ services:
     image: mysql:8.4
     container_name: gmaking-mysql
     restart: always
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    env_file:
+      - ./.env  # 루트 .env에서 DB 관련만 관리
     ports:
       - "3307:3306"
     volumes:
@@ -19,11 +16,10 @@ services:
     build: ./backend/gmaking
     container_name: gmaking-backend
     restart: always
+    # env_file은 backend용 .env만
     env_file:
       - ./backend/gmaking/.env
-      - ./.env
     volumes:
-      - ./backend/gmaking/.env:/app/.env
       - ./backend/gmaking/src/main/resources/gcp-service-key.json:/app/src/main/resources/gcp-service-key.json
     ports:
       - "8080:8080"
@@ -60,8 +56,8 @@ services:
     build: ./growth_ai_server
     container_name: growth_ai_server
     restart: always
-    volumes:
-      - ./backend/gmaking/.env:/app/.env
+    env_file:
+      - ./backend/gmaking/.env
     working_dir: /app
     ports:
       - "8001:8001"

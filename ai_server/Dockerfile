@@ -1,6 +1,8 @@
 # ai_server/Dockerfile
 FROM python:3.11-slim
 
+ENV PYTHONUNBUFFERED=1
+
 # ==============================================================
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -27,7 +29,7 @@ COPY . .
 # CMD ["uvicorn", "model_server:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # ==============================================================
-CMD ["gunicorn", "model_server:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "model_server:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--capture-output", "--log-level", "info"]
 # ==============================================================
 
 # 포트 노출

@@ -24,11 +24,6 @@ import com.project.gmaking.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.project.gmaking.oauth2.service.CustomOAuth2UserService;
 import com.project.gmaking.oauth2.handler.OAuth2AuthenticationFailureHandler;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.web.filter.CorsFilter;
-
-import java.time.Duration;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +92,7 @@ public class SecurityConfig {
                         
                         // 캐릭터 생성
                         .requestMatchers("/api/character/**").permitAll()
+                        .requestMatchers("/api/character/generate").permitAll()
 
                         // /api/** 전체 허용 (이 한 줄로 다 처리됨)
                         .requestMatchers("/api/**").permitAll()

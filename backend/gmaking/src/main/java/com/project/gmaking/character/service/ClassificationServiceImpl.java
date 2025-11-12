@@ -35,6 +35,7 @@ public class ClassificationServiceImpl implements ClassificationService {
             WebClient.Builder webClientBuilder,
             @Value("${model.server.url}") String modelServerUrl
     ) {
+        // 모델 서버 URL 확인 로그
         log.info("모델 서버 URL 로드 완료: {}", modelServerUrl);
 
         HttpClient httpClient = HttpClient.create()
@@ -42,8 +43,11 @@ public class ClassificationServiceImpl implements ClassificationService {
                 .responseTimeout(Duration.ofSeconds(10))
                 .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(10)));
 
+        // baseUrl이 '/'로 끝나지 않으면 자동 추가 (경로 조합 오류 방지)
+        String fixedBaseUrl = modelServerUrl.endsWith("/") ? modelServerUrl : modelServerUrl + "/";
+
         this.webClient = webClientBuilder
-                .baseUrl(modelServerUrl)
+                .baseUrl(fixedBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
@@ -53,10 +57,12 @@ public class ClassificationServiceImpl implements ClassificationService {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", imageFile.getResource());
 
+        // 실제 요청할 URL 로그 출력
         log.info("이미지 분류 요청 시작 → 엔드포인트: {}", classifyPath);
+        log.info("최종 요청 URL = {}{}", webClient, classifyPath);
 
         return webClient.post()
-                .uri(classifyPath)
+                .uri(uriBuilder -> uriBuilder.path(classifyPath).build())
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
