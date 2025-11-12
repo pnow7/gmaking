@@ -27,7 +27,6 @@ COPY . .
 # CMD ["uvicorn", "model_server:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # ==============================================================
-# Gunicorn으로 4개의 Uvicorn 워커를 띄워 안정성을 확보
 CMD ["gunicorn", "model_server:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
 # ==============================================================
 
