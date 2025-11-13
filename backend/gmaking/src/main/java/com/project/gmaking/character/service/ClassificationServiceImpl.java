@@ -75,7 +75,7 @@ public class ClassificationServiceImpl implements ClassificationService {
                     log.info("🧠 테스트 단계 — 응답 수신 완료");
                     return Mono.just("ok");
                 })
-                .timeout(Duration.ofSeconds(15))
+                .timeout(Duration.ofSeconds(60))
                 .onErrorResume(e -> {
                     String msg = String.format("❌ 모델 서버 통신 오류: %s (엔드포인트: %s)", e.getMessage(), classifyPath);
                     log.error(msg);
