@@ -26,6 +26,7 @@ COPY .env ./.env
 # entrypoint 스크립트 복사 및 실행 권한 부여
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
+RUN mkdir -p /tmp && chmod -R 777 /tmp
 
 # 포트 노출
 EXPOSE 8080
