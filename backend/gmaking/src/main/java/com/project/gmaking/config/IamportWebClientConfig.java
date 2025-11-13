@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class IamportWebClientConfig {
     @Value("${iamport.api.base-url:https://api.iamport.kr}")

@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'http://backend:8080'
+    : 'http://localhost:8080';
 
 /**
  * 캐릭터 생성 시작 시 부화권을 차감하고 새 토큰을 반환합니다.
