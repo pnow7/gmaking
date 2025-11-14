@@ -16,6 +16,9 @@ services:
     build: ./backend/gmaking
     container_name: gmaking-backend
     restart: always
+    environment:
+      MODEL_SERVER_URL: "http://ai-server:8000"
+      MODEL_SERVER_CLASSIFY_PATH: "/classify/image"
     env_file:
       - ./backend/gmaking/.env
     volumes:
@@ -24,8 +27,8 @@ services:
       - "8080:8080"
     depends_on:
       - db
-      - ai_server
-      - growth_ai_server
+      - ai-server
+      - growth-ai-server
     networks:
       - gmaking-network
 
@@ -42,18 +45,18 @@ services:
     networks:
       - gmaking-network
 
-  ai_server:
+  ai-server:  # ←←← 여기, 서비스 이름을 이렇게!
     build: ./ai_server
-    container_name: ai_server
+    container_name: ai-server
     restart: always
     ports:
       - "8000:8000"
     networks:
       - gmaking-network
 
-  growth_ai_server:
+  growth-ai-server:
     build: ./growth_ai_server
-    container_name: growth_ai_server
+    container_name: growth-ai-server
     restart: always
     env_file:
       - ./backend/gmaking/.env

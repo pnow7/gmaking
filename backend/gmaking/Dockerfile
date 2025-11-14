@@ -26,7 +26,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y dnsutils iputils-ping curl
 
 # 빌드된 JAR 복사
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/gmaking-0.0.1-SNAPSHOT.jar app.jar
 
 # entrypoint 스크립트
 COPY entrypoint.sh .

@@ -66,15 +66,15 @@ def preprocess_image(image: Image.Image) -> torch.Tensor:
 
 # API 엔드포인트 정의
 @app.post("/classify/image")
-async def classify_image(file: UploadFile = File(...)):
+async def classify_image(image: UploadFile = File(...)):
     if not IS_MODEL_LOADED or model is None:
         # 모델 로드 실패 시 503 Service Unavailable 반환
         raise HTTPException(status_code=503, detail="모델 서버가 준비되지 않았습니다. 모델 로드 오류를 확인하세요.")
         
-    print(f"🔍 [INFO] 이미지 분류 요청 수신: 파일명='{file.filename}', 크기={file.size}bytes")
+    print(f"🔍 [INFO] 이미지 분류 요청 수신: 파일명='{image.filename}', 크기={image.size}bytes")
 
     # 1. 이미지 파일 읽기
-    content = await file.read()
+    content = await image.read()
     
     try:
         # BytesIO를 사용하여 메모리에서 PIL Image로 로드
