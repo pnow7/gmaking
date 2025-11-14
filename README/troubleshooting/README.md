@@ -18,17 +18,18 @@ webClient.post()
   .body(BodyInserters.fromMultipartData(data))
   .retrieve()
 ```
-이 조합에서 발생하는 유명한 버그
+이 조합에서 발생하는 ***유명한 버그***
 
 
-Spring Boot에서 Docker 내부 FastAPI 서버로 `multipart/form-data` 요청을 보낼 때 다음 오류가 발생:
-
+**Spring Boot**에서 **Docker 내부 FastAPI 서버**로 `multipart/form-data` 요청을 보낼 때 다음 **오류**가 발생:
 >java.lang.IllegalArgumentException: host is not specified
 
-Spring 로그 예시: ❌ 모델 서버 통신 오류: Host is not specified (엔드포인트: /classify/image)
+**Spring 로그 예시:**
+>❌ 모델 서버 통신 오류: Host is not specified (엔드포인트: /classify/image)
 
 
-클라이언트 응답: 이미지 분류 서버에 연결할 수 없습니다. 다시 시도해 주세요.
+**클라이언트 응답:**
+>이미지 분류 서버에 연결할 수 없습니다. 다시 시도해 주세요.
 
 ---
 
