@@ -140,3 +140,5 @@ Reactor Netty 와 WebClient multipart/form-data 조합에서 Host 헤더가 유�
 ```yaml
 🧩 모델 서버 응답 VO: { predictedAnimal=..., confidence=0.95 }
 ```
+
+- [⬅ 메인 README로 돌아가기](../../README.md)
