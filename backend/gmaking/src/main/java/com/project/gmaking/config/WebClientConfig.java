@@ -11,7 +11,7 @@ public class WebClientConfig {
     @Value("${model.server.url}")
     private String modelServerUrl;
 
-    @Bean
+    @Bean("classificationWebClient")
     public WebClient classificationWebClient() {
         return WebClient.builder()
                 .baseUrl(modelServerUrl)

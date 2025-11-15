@@ -2,6 +2,7 @@ package com.project.gmaking.character.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -18,6 +19,7 @@ import java.io.IOException;
 @Slf4j
 public class ClassificationServiceImpl implements ClassificationService {
 
+    @Qualifier("classificationWebClient")
     private final WebClient classificationWebClient;
 
     @Value("${model.server.classify.path}")

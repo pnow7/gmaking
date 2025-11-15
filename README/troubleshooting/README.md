@@ -74,6 +74,55 @@ WebClientConfig.java 파일 외에 IamportWebClientConfig.java 존재.
 
 #### 실무에서도 100% 실제로 발생하는 문제!
 
+### ✔ 해결 방법 — WebClient Bean 충돌 문제 해결 방법 (Spring Boot)
+
+**WebClient 빈에 명시적 이름(@Qualifier)을 부여하고 서비스에서 정확히 해당 이름의 빈을 주입**하도록 하면 해결됨.
+
+#### 1. WebClientConfig에서 빈 이름 명시
+```java
+@Bean("classficationWebClient")
+public WebClient classificationWebClient() {
+    return WebClient.builder()
+            .baseUrl(modelServerUrl)
+            .build(); 
+}
+
+#### 2. IamportWebClientConfig도 명시적으로 이름 지정
+```java
+@Bean("iamportWebClient")
+public WebClient iamportWebClient() {
+    return WebClient.builder()
+            .baseUrl(baseUrl)
+            .build();
+}
+```
+
+#### 3. 서비스에서 @Qualifier로 정확한 빈 주입
+```java
+@Service
+@RequiredArgsConstructor
+public class ClassificationServiceImpl implements ClassificationService {
+
+    @Qualifier("classificationWebClient")
+    private final WebClient classificationWebClient;
+}
+```
+
+### 결론
+- WebClient 빈을 여러 개 등록할 경우 → **반드시 @Bean("이름") + @Qualifier("이름") 조합으로 사용해야 함
+
+- 이렇게 하면:
+
+  \. 빈 충돌 없음
+
+  \. 자동 설정과 충돌 없음
+
+  \. Docker/서버 환경에서도 안전
+
+  \. 유지보수 시 명확하게 어떤 WebClient인지 파악 가능
+
+➡️ 이 방식이 **가장 안전하고 권장되는 WebClient 다중 빈 관리 방법**이다.
+
 > 
 
 ---
