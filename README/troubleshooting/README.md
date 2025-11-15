@@ -20,16 +20,37 @@ webClient.post()
 ```
 이 조합에서 발생하는 ***유명한 버그***
 
-
 **Spring Boot**에서 **Docker 내부 FastAPI 서버**로 `multipart/form-data` 요청을 보낼 때 다음 **오류**가 발생:
 >java.lang.IllegalArgumentException: host is not specified
 
 **Spring 로그 예시:**
 >❌ 모델 서버 통신 오류: Host is not specified (엔드포인트: /classify/image)
 
-
 **클라이언트 응답:**
 >이미지 분류 서버에 연결할 수 없습니다. 다시 시도해 주세요.
+
+---
+
+## 📌 Spring Framework GitHub 이슈 (WebClient Host 사라짐 문제)
+
+Spring WebClient + multipart/form-data 조합 시
+`Host is not specified` 오류가 발생하는 문제는 이미 Spring 공식 GitHub에서도 보고된 이슈
+
+### 🔗 공식 이슈 참고 링크
+
+- [WebClient reports 'Host is not specified' for URI with hostname and port, but without scheme](https://github.com/spring-projects/spring-framework/issues/31033)
+
+- [WebClient regression: Netty client no longer accepts hostnames with underscores](https://github.com/spring-projects/spring-framework/issues/31730)
+
+이 두 이슈에서 특히 아래 문제점이 프로젝트 증상과 완전히 일치함:
+
+multipart/form-data 요청일 때 Host 헤더가 사라지거나 무시됨
+
+Docker 내부 hostname 사용 시 문제 더 자주 발생
+
+Netty 기반 WebClient에서 host validation이 강화되어 underscore(_) 포함된 hostname 처리 불가
+
+프로젝트의 ai_server → ai-server 변경이 해결된 이유도 위 이슈와 정확히 일치.
 
 ---
 
